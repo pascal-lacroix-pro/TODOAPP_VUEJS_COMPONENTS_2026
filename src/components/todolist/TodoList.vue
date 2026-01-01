@@ -1,7 +1,25 @@
 <script setup>
+import { onMounted, reactive } from "vue";
+
+import DB from "@/services/DB";
 import TodoListAddForm from "./TodoListAddForm.vue";
 import TodoListFooter from "./TodoListFooter.vue";
 import Todo from "./Todo.vue";
+
+const props = defineProps({
+  apiURL: { type: String, required: true },
+});
+
+const todos = reactive([]);
+
+const init = async (apiURL) => {
+  DB.setApiURL(apiURL);
+  todos.splice(todos.length, 0, ...(await DB.findAll()));
+};
+
+onMounted(() => {
+  init(props.apiURL);
+});
 </script>
 <template>
   <!-- CARD LISTE -->
@@ -19,7 +37,7 @@ import Todo from "./Todo.vue";
       role="list"
       aria-label="Todos"
     >
-      <todo />
+      <todo v-for="todo in todos" :key="todo.id" :todo="todo" />
     </ul>
 
     <TodoListFooter />

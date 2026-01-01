@@ -8,7 +8,7 @@ import AppFooter from "@/components/AppFooter.vue";
   <AppHeader />
 
   <main class="w-full max-w-xl mt-8 bg-slate-200 rounded-xl">
-    <TodoList />
+    <TodoList apiURL="https://68ad9556a0b85b2f2cf3e1b0.mockapi.io" />
   </main>
 
   <AppFooter />
