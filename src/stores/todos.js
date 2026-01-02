@@ -20,44 +20,55 @@ const notCompletedCount = computed(
   () => todos.filter((todo) => !todo.completed).length
 );
 
+// AUTRES MÉTHODES
 const setFilter = (data) => {
   console.log(data);
   filter.value = data;
 };
 
+const withLoading = async (func) => {
+  isLoading.value = true;
+  try {
+    return await func();
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 // INITIALISATION
 const init = async (apiURL) => {
-  DB.setApiURL(apiURL);
-  todos.splice(todos.length, 0, ...(await DB.findAll()));
-  isLoading.value = false;
+  withLoading(async () => {
+    DB.setApiURL(apiURL);
+    todos.splice(todos.length, 0, ...(await DB.findAll()));
+  });
 };
 
 // MÉTHODES CRUD
 // createItem(content)
 // event: on-submit-add-form
 const createItem = async (content) => {
-  isLoading.value = true;
-  const todo = await DB.create(content);
-  todos.push(todo);
-  isLoading.value = false;
+  withLoading(async () => {
+    const todo = await DB.create(content);
+    todos.push(todo);
+  });
 };
 
 // deleteOneById(id)
 // event: @on-delete
 const deleteOneById = async (id) => {
-  isLoading.value = true;
-  await DB.deleteOneById(id);
-  todos.splice(
-    todos.findIndex((todo) => todo.id === id),
-    1
-  );
-  isLoading.value = false;
+  withLoading(async () => {
+    await DB.deleteOneById(id);
+    todos.splice(
+      todos.findIndex((todo) => todo.id === id),
+      1
+    );
+  });
 };
 
 const updateOne = async (todo) => {
-  isLoading.value = true;
-  await DB.updateOne(todo);
-  isLoading.value = false;
+  withLoading(async () => {
+    await DB.updateOne(todo);
+  });
 };
 
 // EXPOSITION
