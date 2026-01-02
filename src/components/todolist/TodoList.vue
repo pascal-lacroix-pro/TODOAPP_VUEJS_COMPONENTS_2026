@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, reactive, computed } from "vue";
+import { onMounted } from "vue";
+import { todosStore } from "@/stores/todos";
 
-import DB from "@/services/DB";
 import TodoListAddForm from "./TodoListAddForm.vue";
 import TodoListFooter from "./TodoListFooter.vue";
 import Todo from "./Todo.vue";
@@ -10,24 +10,8 @@ const props = defineProps({
   apiURL: { type: String, required: true },
 });
 
-const todos = reactive([]);
-
-const notCompletedCount = computed(
-  () => todos.filter((todo) => !todo.completed).length
-);
-
-const createItem = async (content) => {
-  const todo = await DB.create(content);
-  todos.push(todo);
-};
-
-const init = async (apiURL) => {
-  DB.setApiURL(apiURL);
-  todos.splice(todos.length, 0, ...(await DB.findAll()));
-};
-
 onMounted(() => {
-  init(props.apiURL);
+  todosStore.init(props.apiURL);
 });
 </script>
 <template>
@@ -38,7 +22,7 @@ onMounted(() => {
   >
     <h2 id="todo-heading" class="sr-only">Todo list</h2>
 
-    <TodoListAddForm @on-submit-add-form="createItem($event)" />
+    <TodoListAddForm @on-submit-add-form="todosStore.createItem($event)" />
 
     <!-- LISTE DES TODOS -->
     <ul
@@ -46,9 +30,9 @@ onMounted(() => {
       role="list"
       aria-label="Todos"
     >
-      <todo v-for="todo in todos" :key="todo.id" :todo="todo" />
+      <todo v-for="todo in todosStore.todos" :key="todo.id" :todo="todo" />
     </ul>
 
-    <TodoListFooter :notCompletedCount="notCompletedCount" />
+    <TodoListFooter :notCompletedCount="todosStore.notCompletedCount" />
   </section>
 </template>
