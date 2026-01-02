@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, computed } from "vue";
 
 import DB from "@/services/DB";
 import TodoListAddForm from "./TodoListAddForm.vue";
@@ -11,6 +11,10 @@ const props = defineProps({
 });
 
 const todos = reactive([]);
+
+const notCompletedCount = computed(
+  () => todos.filter((todo) => !todo.completed).length
+);
 
 const init = async (apiURL) => {
   DB.setApiURL(apiURL);
@@ -40,6 +44,6 @@ onMounted(() => {
       <todo v-for="todo in todos" :key="todo.id" :todo="todo" />
     </ul>
 
-    <TodoListFooter />
+    <TodoListFooter :notCompletedCount="notCompletedCount" />
   </section>
 </template>
