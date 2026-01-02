@@ -1,4 +1,6 @@
 <script setup>
+import { watch } from "vue";
+
 const props = defineProps({
   todo: { type: Object, required: true },
 });
@@ -8,9 +10,13 @@ const emitOnDelete = () => {
   emits("onDelete", props.todo.id);
 };
 
-const emitOnUpdate = () => {
-  emits("onUpdate", props.todo);
-};
+watch(
+  () => props.todo,
+  (newValue) => {
+    emits("onUpdate", newValue);
+  },
+  { deep: true }
+);
 </script>
 <template>
   <li class="px-4 py-3 sm:px-5" role="listitem">
@@ -21,7 +27,6 @@ const emitOnUpdate = () => {
         type="checkbox"
         class="h-4 w-4 text-blue-600 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         v-model="todo.completed"
-        @change="emitOnUpdate"
       />
       <label
         for="t1"
