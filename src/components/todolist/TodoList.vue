@@ -35,6 +35,7 @@ onMounted(() => {
         :key="todo.id"
         :todo="todo"
         @on-delete="todosStore.deleteOneById($event)"
+        @on-update="todosStore.updateOne($event)"
       />
     </ul>
 

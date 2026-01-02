@@ -32,6 +32,10 @@ const deleteOneById = async (id) => {
   );
 };
 
+const updateOne = async (todo) => {
+  await DB.updateOne(todo);
+};
+
 // EXPOSITION
 export const todosStore = reactive({
   todos,
@@ -39,4 +43,5 @@ export const todosStore = reactive({
   init,
   createItem,
   deleteOneById,
+  updateOne,
 });

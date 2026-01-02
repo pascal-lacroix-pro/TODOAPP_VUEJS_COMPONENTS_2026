@@ -2,10 +2,14 @@
 const props = defineProps({
   todo: { type: Object, required: true },
 });
-const emits = defineEmits(["onDelete"]);
+const emits = defineEmits(["onDelete", "onUpdate"]);
 
 const emitOnDelete = () => {
   emits("onDelete", props.todo.id);
+};
+
+const emitOnUpdate = () => {
+  emits("onUpdate", props.todo);
 };
 </script>
 <template>
@@ -17,6 +21,7 @@ const emitOnDelete = () => {
         type="checkbox"
         class="h-4 w-4 text-blue-600 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         v-model="todo.completed"
+        @change="emitOnUpdate"
       />
       <label
         for="t1"
