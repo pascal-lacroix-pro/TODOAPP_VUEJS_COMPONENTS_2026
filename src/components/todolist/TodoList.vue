@@ -5,6 +5,7 @@ import { todosStore } from "@/stores/todos";
 import TodoListAddForm from "./TodoListAddForm.vue";
 import TodoListFooter from "./TodoListFooter.vue";
 import Todo from "./Todo.vue";
+import Loader from "../Loader.vue";
 
 const props = defineProps({
   apiURL: { type: String, required: true },
@@ -15,6 +16,8 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Loader :isLoading="todosStore.isLoading" />
+
   <!-- CARD LISTE -->
   <section
     class="bg-slate-100 rounded-xl shadow ring-1 ring-slate-200/60 overflow-hidden"
