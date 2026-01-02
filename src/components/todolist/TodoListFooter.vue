@@ -1,7 +1,21 @@
 <script setup>
+import { ref, watch } from "vue";
+
 const props = defineProps({
-  notCompletedCount: { type: Number, rerquired: true },
+  notCompletedCount: { type: Number, required: true },
+  filter: { type: String, required: true },
 });
+
+const emits = defineEmits(["onSetFilter"]);
+
+const filter = ref(props.filter);
+
+watch(
+  () => filter.value,
+  (newValue) => {
+    emits("onSetFilter", newValue);
+  }
+);
 </script>
 <template>
   <!-- FOOTER DE LISTE -->
@@ -26,20 +40,26 @@ const props = defineProps({
       <!-- Filtres -->
       <nav class="flex items-center gap-2" aria-label="Filters">
         <button
-          class="w-24 px-3 py-1.5 text-sm rounded-full border border-slate-400 bg-slate-400 text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          class="w-24 px-3 py-1.5 text-sm rounded-full border border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           aria-pressed="true"
+          :class="{ 'bg-slate-400 text-slate-200': filter === 'all' }"
+          @click.prevent="filter = 'all'"
         >
           All
         </button>
         <button
           class="w-24 px-3 py-1.5 text-sm rounded-full border border-slate-400 hover:bg-slate-400 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           aria-pressed="false"
+          :class="{ 'bg-slate-400 text-slate-200': filter === 'active' }"
+          @click.prevent="filter = 'active'"
         >
           Active
         </button>
         <button
           class="w-24 px-3 py-1.5 text-sm rounded-full border border-slate-400 hover:bg-slate-400 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           aria-pressed="false"
+          :class="{ 'bg-slate-400 text-slate-200': filter === 'completed' }"
+          @click.prevent="filter = 'completed'"
         >
           Completed
         </button>

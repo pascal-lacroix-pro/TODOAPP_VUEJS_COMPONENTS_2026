@@ -31,7 +31,7 @@ onMounted(() => {
       aria-label="Todos"
     >
       <todo
-        v-for="todo in todosStore.todos"
+        v-for="todo in todosStore.filteredTodos"
         :key="todo.id"
         :todo="todo"
         @on-delete="todosStore.deleteOneById($event)"
@@ -39,6 +39,10 @@ onMounted(() => {
       />
     </ul>
 
-    <TodoListFooter :notCompletedCount="todosStore.notCompletedCount" />
+    <TodoListFooter
+      :notCompletedCount="todosStore.notCompletedCount"
+      :filter="todosStore.filter"
+      @on-set-filter="todosStore.setFilter($event)"
+    />
   </section>
 </template>
