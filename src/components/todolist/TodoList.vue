@@ -16,6 +16,11 @@ const notCompletedCount = computed(
   () => todos.filter((todo) => !todo.completed).length
 );
 
+const createItem = async (content) => {
+  const todo = await DB.create(content);
+  todos.push(todo);
+};
+
 const init = async (apiURL) => {
   DB.setApiURL(apiURL);
   todos.splice(todos.length, 0, ...(await DB.findAll()));
@@ -33,7 +38,7 @@ onMounted(() => {
   >
     <h2 id="todo-heading" class="sr-only">Todo list</h2>
 
-    <TodoListAddForm />
+    <TodoListAddForm @on-submit-add-form="createItem($event)" />
 
     <!-- LISTE DES TODOS -->
     <ul
