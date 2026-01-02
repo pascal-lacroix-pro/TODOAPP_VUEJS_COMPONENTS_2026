@@ -30,7 +30,12 @@ onMounted(() => {
       role="list"
       aria-label="Todos"
     >
-      <todo v-for="todo in todosStore.todos" :key="todo.id" :todo="todo" />
+      <todo
+        v-for="todo in todosStore.todos"
+        :key="todo.id"
+        :todo="todo"
+        @on-delete="todosStore.deleteOneById($event)"
+      />
     </ul>
 
     <TodoListFooter :notCompletedCount="todosStore.notCompletedCount" />

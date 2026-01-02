@@ -4,7 +4,7 @@ const emits = defineEmits(["onSubmitAddForm"]);
 
 const newContent = ref("");
 
-const submitAddForm = () => {
+const emitOnSubmitAddForm = () => {
   emits("onSubmitAddForm", newContent.value);
   newContent.value = "";
 };
@@ -15,7 +15,7 @@ const submitAddForm = () => {
     <form
       class="flex gap-2"
       aria-label="Add a new task"
-      @submit.prevent="submitAddForm()"
+      @submit.prevent="emitOnSubmitAddForm()"
     >
       <label for="new-todo" class="sr-only">New task</label>
       <input
